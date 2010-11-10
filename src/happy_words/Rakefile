@@ -1,0 +1,48 @@
+require 'rake/clean'
+
+task :default => :spec
+
+task :spec do
+  sh "rspec spec"
+end
+
+PKG_FILES = FileList['Rakefile',
+  'lib/**/*.rb',
+  'spec/**/*.rb']
+
+require 'rake/gempackagetask'
+SPEC = Gem::Specification.new do |s|
+  s.name = 'happy-words'
+  s.version = '0.0.1'
+  s.summary = "Find Happy Words in Text"
+  s.description = <<-EOF
+    The happy_words library finds happy words in text.
+    EOF
+  s.files = PKG_FILES.to_a
+  s.require_path = 'lib'
+
+  s.add_dependency('re', '~> 0.0.1')
+  s.add_development_dependency('rspec', "> 2.0.0")
+  s.add_development_dependency('flexmock', "> 0.8.0")
+
+  s.has_rdoc = true
+  s.rdoc_options = [
+    '--line-numbers', '--inline-source',
+    '--main' , 'happy_words.rb',
+    '--title', 'HappyWords -- Find Happy Words in Text'
+  ]
+  s.author = "Jim Weirich"
+  s.email = "jim.weirich@gmail.com"
+  s.homepage = "http://github.com/jimweirich/happy_words"
+  s.rubyforge_project = "n/a"
+end
+
+Rake::GemPackageTask.new(SPEC) do |pkg|
+end
+
+
+desc "Install libraries used for development and testing"
+task :install_dev_dependencies do
+  sh 'gem install rspec -v">= 2.0.0"'
+  sh 'gem install flexmock'
+end
