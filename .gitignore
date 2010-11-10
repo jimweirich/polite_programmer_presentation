@@ -1,0 +1,5 @@
+*.gem
+.DS_Store
+.project_env.rc
+src/doc
+src/songs
